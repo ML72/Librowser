@@ -1,10 +1,23 @@
 // IMPORTS AND SETUP
 const express = require('express');
+const connectDB = require('./server/database/config');
+const User = require('./server/schemas/User');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+connectDB();
 
+
+
+// LISTEN TO POST ROUTES
+app.post("/signin", (req, res) => {
+
+});
+
+app.post("/signup", (req, res) => {
+    
+});
 
 // LISTEN TO VIEW ROUTES
 app.get("/", (req, res) => {
