@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 
-const URI = process.env.DB_URI || "mongodb+srv://TestUser:YhkUxReF6JVvzOvr@librowser.15gs2.mongodb.net/Test?retryWrites=true&w=majority";
-
-const connectDB = async () => {
+const connectDB = async (URI) => {
 
     try {
 
@@ -18,6 +16,8 @@ const connectDB = async () => {
         console.error(err.message);
         process.exit(1);
     }
+
+    return mongoose;
 }
 
 module.exports = connectDB;
