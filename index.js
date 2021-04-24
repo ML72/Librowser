@@ -11,7 +11,13 @@ app.get("/", (req, res) => {
     res.render(__dirname + '/client/views/public/landing.ejs');
 });
 
+app.get("/signup", (req, res) => {
+    res.render(__dirname + '/client/views/public/signup.ejs');
+});
 
+app.get("/signin", (req, res) => {
+    res.render(__dirname + '/client/views/public/signin.ejs');
+});
 
 app.get("*", (req, res) => {
     res.redirect('/');
