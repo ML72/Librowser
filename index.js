@@ -8,8 +8,10 @@ const app = express();
 
 // LISTEN TO VIEW ROUTES
 app.get("/", (req, res) => {
-    res.render(__dirname + '/client/views/landing.ejs');
+    res.render(__dirname + '/client/views/public/landing.ejs');
 });
+
+
 
 app.get("*", (req, res) => {
     res.redirect('/');
