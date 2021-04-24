@@ -5,7 +5,9 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
 const passportSetup = require("./server/passport/setup");
-const { mongo } = require('mongoose');
+const bodyParser = require('body-parser');
+const bcrypt = require("bcryptjs");
+const User = require("./server/schemas/User");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -24,11 +26,12 @@ app.use(session({
 
 app.use(passportSetup.initialize());
 app.use(passportSetup.session());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-// LISTEN TO POST ROUTES
-app.post("/signup", async (req, res, next) => {
+// LISTEN TO AUTH ROUTES
+app.post("/signup", async (req, res) => {
 
     let { email, password } = req.body;
 
@@ -36,6 +39,13 @@ app.post("/signup", async (req, res, next) => {
 
     if(!user) {
         
+        if(!email) {
+            res.json({
+                success: false,
+                msg: "Please enter an email!"
+            });
+        }
+
         if(password.length < 8) {
             res.json({
                 success: false,
@@ -46,29 +56,64 @@ app.post("/signup", async (req, res, next) => {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
 
-                if(err) {
-                    throw err;
-                }
-
                 let newUser = new User({ email, password: hash });
                 await newUser.save();
 
-                passport.authenticate('local', { successRedirect: '/home' });
+                console.log("Successfully registered " + email);
+                res.json({
+                    success: true,
+                    msg: "We've successfully signed you up!"
+                });
             })
         })
-    }
+    } else {
 
-    res.json({
-        success: false,
-        msg: "This email is already taken"
-    });
+        res.json({
+            success: false,
+            msg: "This email is already taken"
+        });
+    }
 });
 
-app.post("/signin", passport.authenticate('local', {
-    successRedirect: '/home'
+app.post("/signin", async (req, res, next) => {
+
+    let { email, password } = req.body;
+    let user = await User.findOne({ email }).exec();
+
+    if(user) {
+
+        bcrypt.compare(password, user.password, (err, matches) => {
+
+            if(matches) {
+                next();
+            } else {
+                res.json({ success: false, msg: "Your email or password is incorrect" });
+            }
+        });
+    } else {
+        res.json({ success: false, msg: "Your email or password is incorrect" });
+    }
+}, passport.authenticate('local', {
+    successRedirect: '/home' // This redirect doesn't work, but I did a frontend workaround
 }));
 
-// LISTEN TO VIEW ROUTES
+app.get("/signout", (req, res) => {
+    if(req.isAuthenticated()) {
+        req.logout();
+    }
+    res.redirect('/');
+})
+
+// LISTEN TO PRIVATE ROUTES
+app.get("/home", (req, res) => {
+    if(req.isAuthenticated()) {
+        res.render(__dirname + '/client/views/private/home.ejs');
+    } else {
+        res.redirect("/");
+    }
+});
+
+// LISTEN TO PUBLIC ROUTES
 app.get("/", (req, res) => {
     if(!req.isAuthenticated()) {
         res.render(__dirname + '/client/views/public/landing.ejs');

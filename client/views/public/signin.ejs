@@ -1,72 +1,53 @@
 <%# Signin page for users %>
 
 <%- include("../partials/header") -%>
+<%- include("../partials/publicNav") %>
 
+<script>
+    $(document).ready(() => {
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" aria-label="Navbar">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample" aria-controls="navbarsExample" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        $("#flash").hide(0);
 
-      <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Sign In</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="sign-up.html">Sign Up</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+        $("#submit").click(() => {
 
-  <!-- Page Content -->
-  <div class="container">
+            let email = $("#email").val();
+            let password = $("#password").val();
+
+            $.post("/signin", { email, password }, (response) => {
+                if(!response.success && response.msg) {
+                    $("#flash").show(500);
+                    document.getElementById("flash").innerHTML = response.msg; 
+                } else {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center mb-3">
-        <h1 class="mt-5">Sign In</h1>
-        <p class="lead">Don't have an account? <a href="sign-up.html">Register</a></p>
-      </div>
+        <div class="col-lg-12 text-center mb-3">
+            <h1 class="mt-5">Sign In to Librowser</h1>
+            <p class="lead">Don't have an account? <a href="/signup">Sign up</a></p>
+        </div>
     </div>
-  </div>
+</div>
   
 <div class="container">
-	<form>
-		<div class="form-floating mb-3">
-			<input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-			<label for="floatingInput">Email address</label>
-		</div>
-		<div class="form-floating mb-3">
-			<input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-			<label for="floatingPassword">Password</label>
-		</div>
-		<div class="form-check mb-3">
-			<input type="checkbox" class="form-check-input" id="rememberMe">
-			<label class="form-check-label" for="rememberMe">Remember me</label>
-		</div>
-		<button type="submit" class="btn btn-primary">Log In</button>
-	</form>
-</div>
+    <form action="/signin" method="post">
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+            <label for="email">Email address</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <label for="password">Password</label>
+        </div>
+        <button type="button" class="btn btn-primary mb-3" id="submit">Log In</button>
+    </form>
 
-  
-  <script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myList li").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-</script>
+    <div class="alert alert-danger" role="alert" id="flash"></div>
+</div>
 
 <%- include("../partials/footer") -%>
