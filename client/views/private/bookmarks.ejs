@@ -31,6 +31,9 @@
             return str.length > 12 ? str.substring(0, 10).trim() + "..." : str;
         }
 
+        // setup view modal
+        $("#modalTrigger").hide(0);
+
         // render function - note that list is meant to track the order
         let renderList = (list) => {
 
@@ -48,7 +51,7 @@
             subList.forEach((bookmark) => {
                 index++;
                 var newLi = $('<tr><th>' + index + ". " + trim(bookmark.title) + '</th><td>' + trim(bookmark.book) + '</td><td>' + trim(bookmark.page) + '</td><td>' + trim("" + bookmark.tags) + '</td><td>'
-                    + '<button type="button" class="btn btn-outline-secondary btn-sm col-auto me-1" id="update-btn" name="update-' + bookmark.id + '">👁️</button>'
+                    + '<button type="button" class="btn btn-outline-secondary btn-sm col-auto me-1" id="view-btn" name="view-' + bookmark.id + '">👁️</button>'
                     + '<button type="button" class="btn btn-outline-danger btn-sm col-auto mw-1" id="delete-btn" name="delete-' + bookmark.id + '">🗑️</button></tr>');
                 $('#tableBody').append(newLi);
             });
@@ -59,10 +62,24 @@
                 renderList(bookmarks);
                 updateServer();
             });
+
+            $("#tableBody").on('click', '#view-btn', function () {
+                let toViewId = $(this).attr('name').split("-")[1];
+                bookmark = bookmarks.filter(bookmark => bookmark.id == toViewId)[0];
+
+                $("#titleDisplay").text(bookmark.title);
+                $("#tagDisplay").text("Tags: " + bookmark.tags);
+                $("#pageDisplay").text("Page " + bookmark.page);
+                $("#bookDisplay").text(bookmark.book);
+                $("#descDisplay").text(bookmark.description);
+
+                MathJax.typeset();
+                $("#modalTrigger").click();
+            });
         }
 
         // search function handling
-        setInterval(() => {
+        $("#search").keyup(() => {
             let search = $("#search").val();
             if(search.length < 1) {
                 renderList(bookmarks);
@@ -72,7 +89,7 @@
                     return expression.test(bookmark.title) || expression.test(bookmark.book) || search == bookmark.page
                         || bookmark.tags.filter((tag) => search.toLowerCase() == tag.toLowerCase()).length > 0 }));
             }
-        }, 1000);
+        });
 
         // jQuery form handling
         $("#incompleteForm").hide(0);
@@ -117,14 +134,15 @@
 
 
         renderList(bookmarks);
+        setTimeout(() => {
+            $("#equationAlert").hide(500);
+        }, 10000);
     });
 </script>
 
 <div class="container my-5">
 
-    <div class="alert alert-info alert-dismissible fade show" role="alert">The text fields (title, page #, etc.) on the bookmarks are editable. <strong>Try it out!</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    <div class="alert alert-info alert-dismissible fade show" role="alert" id="equationAlert">We support LaTeX! Surround your equations with $ symbols. <strong>Try it out!</strong></div>
 
     <div class="pt-2 pb-3">
         <h1>Your Bookmarks</h1>
@@ -179,6 +197,26 @@
         </thead>
         <tbody id="tableBody"></tbody>
     </table>
+</div>
+
+<button class="dropdown-item" href="#" id="modalTrigger" data-bs-toggle="modal" data-bs-target="#bookmarkModal"></button>
+<div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="titleDisplay"></h4>
+            </div>
+			<div class="modal-body">
+                <h5 id="bookDisplay"></h5>
+                <h6 id="tagDisplay"></h6>
+                <h6 id="pageDisplay"></h6>
+				<p id="descDisplay"></p>
+            </div>
+            <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="dismissModal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <%- include("../partials/footer") -%>
