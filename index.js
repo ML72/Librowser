@@ -105,6 +105,15 @@ app.get("/signout", (req, res) => {
 })
 
 // LISTEN TO PRIVATE ROUTES
+app.get("/bookmarks", async (req, res) => {
+    if(req.isAuthenticated()) {
+        let user = await User.findOne({ email: req.user.email }).exec();
+        res.render(__dirname + '/client/views/private/bookmarks.ejs', { pageName: "My Bookmarks", bookmarks: JSON.stringify(user.bookmarks) });
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.get("/home", (req, res) => {
     if(req.isAuthenticated()) {
         res.render(__dirname + '/client/views/private/home.ejs');
@@ -134,6 +143,14 @@ app.post("/updateBookmarks", async (req, res) => {
 app.get("/", (req, res) => {
     if(!req.isAuthenticated()) {
         res.render(__dirname + '/client/views/public/landing.ejs');
+    } else {
+        res.redirect("/home");
+    }
+});
+
+app.get("/about", (req, res) => {
+    if(!req.isAuthenticated()) {
+        res.render(__dirname + '/client/views/public/about.ejs', { pageName: "About Librowser" });
     } else {
         res.redirect("/home");
     }

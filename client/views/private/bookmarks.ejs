@@ -1,0 +1,158 @@
+<%# Bookmarks page for users %>
+<%# ARGUMENTS: bookmarks - an array of the bookmarks %>
+
+<%- include("../partials/header") -%>
+<%- include("../partials/privateNav") %>
+
+<script>
+    $(document).ready(function() {
+
+        // load list
+        let bookmarkString = "<%= bookmarks %>";
+        bookmarkString = bookmarkString.replaceAll("&#34;", "\"");
+        let bookmarks = JSON.parse(bookmarkString);
+        let pagination = 1;
+
+        // server update function
+        let updateServer = () => {
+            $("#autosave").html("Saving your bookmarks...");
+            $.post("/updateBookmarks", { bookmarks: JSON.stringify(bookmarks) }, (response) => {
+                if(response.success) {
+                    $("#autosave").html("All changes saved on server");
+                } else {
+                    $("#autosave").html("Oh no! Something happened on our side and your bookmarks were not saved");
+                }
+            });
+        }
+
+        // render function - note that list is meant to track the order
+        let renderList = (list) => {
+
+            while(pagination > 1 && 15*(pagination-1) > list.length - 1) {
+                pagination--;
+            }
+
+            let subList = list.slice(Math.min(list.length-1, 15*(pagination-1)), Math.min(list.length, 15*pagination-1));
+            
+            $('#tableBody').html('');
+            subList.forEach((bookmark) => {
+                var newLi = $('<tr><th>' + bookmark.title + '</th><td>' + bookmark.book + '</td><td>' + bookmark.page + '</td><td>' + bookmark.tags + '</td><td>'
+                    + '<button type="button" class="btn btn-outline-secondary btn-sm col-auto me-1" id="update-btn" name="update-' + bookmark.id + '">🖊️</button>'
+                    + '<button type="button" class="btn btn-outline-danger btn-sm col-auto mw-1" id="delete-btn" name="delete-' + bookmark.id + '">🗑️</button></tr>');
+                $('#tableBody').append(newLi);
+            });
+        
+            $("#tableBody").on('click', '#delete-btn', function () {
+                let toDeleteId = $(this).attr('name').split("-")[1];
+                bookmarks = bookmarks.filter(bookmark => bookmark.id != toDeleteId);
+                renderList(bookmarks);
+            });
+
+            updateServer();
+        }
+
+        // search function handling
+        setInterval(() => {
+            let search = $("#search").val();
+            if(search.length < 1) {
+                renderList(bookmarks);
+            } else {
+                renderList(bookmarks.filter(bookmark => {
+                    let expression = new RegExp(search, "i");
+                    return expression.test(bookmark.title) || expression.test(bookmark.book) || search == bookmark.page
+                        || bookmark.tags.filter((tag) => search.toLowerCase() == tag.toLowerCase()).length > 0 }));
+            }
+        }, 1000);
+
+        // jQuery form handling
+        $("#incompleteForm").hide(0);
+
+        $('#addButton').click(function () {
+
+            var title = $('#bookmarkTitle').val();
+            var tags = $('#bookmarkTags').val();
+            var book = $('#bookmarkBook').val();
+            var page = $('#bookmarkPage').val();
+            var description = $('#bookmarkDesc').val();
+
+            if (title && page) {
+
+                bookmarks.push({
+                    title, tags: tags.split("|"), book, page, description,
+                    id: bookmarks.length > 0 ? bookmarks[bookmarks.length - 1].id + 1 : 1
+                });
+                
+                $('#bookmarkTitle').val('');
+                $('#bookmarkTags').val('');
+                $('#bookmarkBook').val('');
+                $('#bookmarkPage').val('');
+                $('#bookmarkDesc').val('');
+
+                pagination = 1;
+                renderList(bookmarks);
+            } else {
+                $("#incompleteForm").show(500);
+            }
+        });
+
+        renderList(bookmarks);
+    });
+</script>
+
+<div class="container my-5">
+
+    <div class="alert alert-info alert-dismissible fade show" role="alert">The text fields (title, page #, etc.) on the bookmarks are editable. <strong>Try it out!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="pt-2 pb-3">
+        <h1>Your Bookmarks</h1>
+        <div id="autosave" class="form-text">Bookmarks autosave as you edit them</div>
+        <p>Stay on top of where all the neccessary information is in your textbooks!</p>
+    </div>
+
+    <button class="btn btn-primary mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm">New bookmark</button>
+    <div class="collapse mb-4" id="collapseForm">
+        <div class="card card-body">
+            <form name="bookmarkList" class="row g-4" id="bookmark">
+                <h3>Save a New Bookmark</h3>
+                <div class="form-group col-12">
+                    <input class="form-control" type="text" id="bookmarkTitle" placeholder="Bookmark title *" />
+                </div>
+                <div class="form-group col-12">
+                    <input class="form-control" type="text" id="bookmarkTags" placeholder="Bookmark tags (separate with '|' characters)" />
+                </div>
+                <div class="form-group col-12 col-md-8">
+                    <input class="form-control" type="text" id="bookmarkBook" placeholder="Book referenced" />
+                </div>
+                <div class="form-group col-12 col-md-4">
+                    <input class="form-control" type="number" id="bookmarkPage" placeholder="Page number *" />
+                </div>
+                <div class="form-group col-12">
+                    <textarea class="form-control" type="text" id="bookmarkDesc" rows="4" placeholder="Bookmark description & details"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="addButton" class="btn btn-primary col-auto">Add bookmark</button>
+                    <div class="alert alert-danger mt-3" role="alert" id="incompleteForm">Bookmarks must have a title and a page number!</div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <input class="form-control my-3" id="search" type="text" placeholder="Search or Filter" />
+
+    <table class="table table-hover" id="bookmarkTable">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Book</th>
+                <th scope="col">Page</th>
+                <th scope="col">Tags</th>
+                <th scope="col-4 col-sm-2 col-md-1"></th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<%- include("../partials/footer") -%>
