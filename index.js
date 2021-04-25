@@ -148,14 +148,6 @@ app.get("/", (req, res) => {
     }
 });
 
-app.get("/about", (req, res) => {
-    if(!req.isAuthenticated()) {
-        res.render(__dirname + '/client/views/public/about.ejs', { pageName: "About Librowser" });
-    } else {
-        res.redirect("/home");
-    }
-});
-
 app.get("/signup", (req, res) => {
     if(!req.isAuthenticated()) {
         res.render(__dirname + '/client/views/public/signup.ejs', { pageName: "Sign Up" });

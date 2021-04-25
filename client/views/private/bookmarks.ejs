@@ -12,6 +12,7 @@
         bookmarkString = bookmarkString.replaceAll("&#34;", "\"");
         let bookmarks = JSON.parse(bookmarkString);
         let pagination = 1;
+        let entriesPerPage = 10;
 
         // server update function
         let updateServer = () => {
@@ -25,19 +26,29 @@
             });
         }
 
+        // define trim function
+        let trim = (str) => {
+            return str.length > 12 ? str.substring(0, 10).trim() + "..." : str;
+        }
+
         // render function - note that list is meant to track the order
         let renderList = (list) => {
 
-            while(pagination > 1 && 15*(pagination-1) > list.length - 1) {
+            if(pagination <= 0) {
+                pagination = 1;
+            }
+            while(pagination > 1 && entriesPerPage*(pagination-1) > list.length - 1) {
                 pagination--;
             }
 
-            let subList = list.slice(Math.min(list.length-1, 15*(pagination-1)), Math.min(list.length, 15*pagination-1));
-            
+            let subList = list.slice(Math.min(list.length-1, entriesPerPage*(pagination-1)), Math.min(list.length, entriesPerPage*pagination));
+            let index = (pagination-1) * entriesPerPage; 
+
             $('#tableBody').html('');
             subList.forEach((bookmark) => {
-                var newLi = $('<tr><th>' + bookmark.title + '</th><td>' + bookmark.book + '</td><td>' + bookmark.page + '</td><td>' + bookmark.tags + '</td><td>'
-                    + '<button type="button" class="btn btn-outline-secondary btn-sm col-auto me-1" id="update-btn" name="update-' + bookmark.id + '">🖊️</button>'
+                index++;
+                var newLi = $('<tr><th>' + index + ". " + trim(bookmark.title) + '</th><td>' + trim(bookmark.book) + '</td><td>' + trim(bookmark.page) + '</td><td>' + trim("" + bookmark.tags) + '</td><td>'
+                    + '<button type="button" class="btn btn-outline-secondary btn-sm col-auto me-1" id="update-btn" name="update-' + bookmark.id + '">👁️</button>'
                     + '<button type="button" class="btn btn-outline-danger btn-sm col-auto mw-1" id="delete-btn" name="delete-' + bookmark.id + '">🗑️</button></tr>');
                 $('#tableBody').append(newLi);
             });
@@ -46,9 +57,8 @@
                 let toDeleteId = $(this).attr('name').split("-")[1];
                 bookmarks = bookmarks.filter(bookmark => bookmark.id != toDeleteId);
                 renderList(bookmarks);
+                updateServer();
             });
-
-            updateServer();
         }
 
         // search function handling
@@ -88,12 +98,23 @@
                 $('#bookmarkPage').val('');
                 $('#bookmarkDesc').val('');
 
-                pagination = 1;
+                pagination = Math.ceil(bookmarks.length / entriesPerPage) + 1;
                 renderList(bookmarks);
+                updateServer();
             } else {
                 $("#incompleteForm").show(500);
             }
         });
+
+        // handle pagination
+        $("#pagLeft").click(() => {
+            pagination--;
+        });
+        $("#pagRight").click(() => {
+            pagination++;
+        });
+
+
 
         renderList(bookmarks);
     });
@@ -148,7 +169,12 @@
                 <th scope="col">Book</th>
                 <th scope="col">Page</th>
                 <th scope="col">Tags</th>
-                <th scope="col-4 col-sm-2 col-md-1"></th>
+                <th scope="col-4 col-sm-2 col-md-1">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-primary" id="pagLeft"><<</button>
+                        <button type="button" class="btn btn-primary" id="pagRight">>></button>
+                    </div>
+                </th>
             </tr>
         </thead>
         <tbody id="tableBody"></tbody>
