@@ -3,7 +3,407 @@
 <%- include("../partials/header") -%>
 <%- include("../partials/publicNav") %>
 
-<!-- INCLUDE CUSTOM CODE HERE -->
-<h1 class="container">HI HI HI</h1>
+<script>
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        // fade div
+        function fadeMyDiv() {
+            $("#loading").fadeOut('50');
+        }
+        window.setTimeout(fadeMyDiv, 350);
+
+        AOS.init({ once: false, duration: "900" });
+
+        // fancy tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        var TxtRotate = function (el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 11) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtRotate.prototype.tick = function () {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 250 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
+
+        var elements = document.getElementsByClassName('txt-rotate');
+        for (var i = 0; i < elements.length; i++) {
+            var toRotate = elements[i].getAttribute('data-rotate');
+            var period = elements[i].getAttribute('data-period');
+            if (toRotate) {
+                new TxtRotate(elements[i], JSON.parse(toRotate), period);
+            }
+        }
+        // css stuff
+        var css = document.createElement("style");
+        css.type = "text/css";
+        css.innerHTML = ".txt-rotate > .wrap { border-right: 0.07em solid #0ECAF0 }";
+        document.body.appendChild(css);
+
+    });
+</script>
+
+
+<div class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+        <h1 class="display-3 fw-bold text-white mb-3">Librowser</h1>
+        <p class="lead text-info mb-4">Stay on top of your <span class="txt-rotate" data-period="1600" data-rotate='[ "studying", "homework", "reading", "note-taking"]'></span></p>
+        <div class="col-lg-6 mx-auto">
+            <p class="fs-5 mb-5" data-aos="fade-up" data-aos-delay="50">Keep your paper study resources organized with Librowser,
+                 a free bookmarking tool to store and track information about important content from your physical books and articles.</p>
+        </div>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center" data-aos="fade-up" data-aos-delay="150">
+            <a class="btn btn-outline-info btn-lg px-5 me-sm-3 fw-bold" href="/signup" role="button">Sign Up</a>
+            <a class="btn btn-outline-light btn-lg px-5 me-sm-3 fw-bold" href="/signin" role="button">Sign In</a>
+        </div>
+    </div>
+</div>
+
+<svg class="icon-root dark" focusable="false" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none"
+    style="width: 100%; height: 7vh; display: block; margin-bottom: -5px; margin-top: -1px;">
+    <path d="M0 0 L50 100 L100 0"></path>
+</svg>
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-md-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6" data-aos="fade-in" data-aos-delay="400">
+            <svg data-name="Layer 1" class="d-block mx-lg-auto img-fluid" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 790 701.99219">
+                <path class="vert-move1"
+                    d="M678.92335 580.03286c-13.32974 39.04189-30.47207 77.99971-52.43309 115.07876-.48744.835-.98036 1.65342-1.47751 2.48541l-54.36844-17.2001c.31277-.787.65529-1.66776 1.02323-2.62911 21.92914-56.71074 154.23254-402.23642 148.294-470.36194.63927 5.57642 21.33653 190.1207-41.03819 372.62698z"
+                    fill="#e6e6e6" />
+                <path
+                    d="M636.97922 698.42993c-.73886.75543-1.497 1.50475-2.26061 2.23766l-40.786-12.90312c.55137-.66713 1.19352-1.45315 1.93189-2.34165 12.07938-14.75186 47.99146-58.91856 83.05881-105.39 37.68531-49.9396 74.40225-102.533 79.54812-124.14378-1.03355 4.91431-33.21615 154.51044-121.49221 242.54089z"
+                    fill="#e6e6e6" />
+                <path
+                    d="M657.36664 123.11425c-.01538 0-.0296.0044-.045.00489v-87.4292A35.69 35.69 0 00621.63164 0h-273.72a35.69 35.69 0 00-35.69 35.68994v44.8208a2.89173 2.89173 0 00-2.83008 2.88867v22.2002a2.891 2.891 0 002.83008 2.88818v23.25684h-.14508a2.89485 2.89485 0 00-2.895 2.895v42.92969a2.89486 2.89486 0 002.895 2.895h.14508v17.05029h-.04511a2.89485 2.89485 0 00-2.89495 2.895v43.34961a2.89485 2.89485 0 002.89495 2.895h.04511v419.02595a35.69 35.69 0 0035.69 35.68994h273.72a35.69 35.69 0 0035.69-35.68994V208.12988c.01538 0 .0296.00439.045.00439a5.15473 5.15473 0 005.155-5.15478v-74.71a5.15515 5.15515 0 00-5.155-5.15524z"
+                    fill="#3f3d56" />
+                <path
+                    d="M636.01166 45.68009v610a27.41 27.41 0 01-27.41 27.4h-247.66a27.41 27.41 0 01-27.41-27.4v-610a27.41 27.41 0 0127.41-27.41h37.06v4.81a22.58 22.58 0 0022.57 22.57h126a22.57 22.57 0 0022.52-22.57v-4.76h39.51a27.41 27.41 0 0127.41 27.36z"
+                    fill="#fff" />
+                <path
+                    d="M234.411 342.28173a10.74274 10.74274 0 00-14.42255 7.9585l-88.25427 47.98779 15.51715 17.46436 81.96-52.59912a10.80091 10.80091 0 005.19971-20.81153zM211.903 687.551l10.997-7.113-22.203-45.803-16.231 10.498 27.437 42.418z"
+                    fill="#ffb8b8" />
+                <path
+                    d="M250.71403808 676.93104504l-34.56268313 22.35608572-8.63756364-13.35374084 21.708237-14.04147953a15.30912 15.30912 0 0121.1690385 4.53983696l.32297373.49931991z"
+                    fill="#2f2e41" />
+                <path fill="#ffb8b8" d="M88.511 689.206h13.097l6.233-50.518h-19.33v50.518z" />
+                <path
+                    d="M126.86738 701.36724H85.70461v-15.9038h25.85364a15.30912 15.30912 0 0115.30913 15.30914V701.36724z"
+                    fill="#2f2e41" />
+                <path
+                    d="M389 98.99218h-27a2.5 2.5 0 010-5h27a2.5 2.5 0 010 5zM389 105.99218h-27a2.5 2.5 0 010-5h27a2.5 2.5 0 010 5zM389 112.99218h-27a2.5 2.5 0 010-5h27a2.5 2.5 0 010 5zM598.29156 106.04214h-.91l-.35-.29a7.61019 7.61019 0 001.78-4.89 7.44 7.44 0 10-7.4 7.48 7.73 7.73 0 004.88-1.78l.34.29v.92l5.74 5.75 1.72-1.72zm-6.88 0a5.18 5.18 0 115.15992-5.2l.00006.02a5.15 5.15 0 01-5.11994 5.17992c-.0133.00008-.02667.00011-.04.00008z"
+                    fill="#3f3d56" />
+                <path d="M444.00537 190.99218H395.5a11 11 0 010-22h48.50537a11 11 0 010 22z" fill="#0d6efd" />
+                <path
+                    d="M592.5 214.99218h-202a6 6 0 010-12h202a6 6 0 010 12zM464.7002 238.99218H390.5a6 6 0 010-12h74.2002a6 6 0 010 12z"
+                    fill="#e6e6e6" />
+                <path d="M444.00537 456.99218H395.5a11 11 0 010-22h48.50537a11 11 0 010 22z" fill="#0d6efd" />
+                <path
+                    d="M592.5 480.99218h-202a6 6 0 010-12h202a6 6 0 010 12zM464.7002 504.99218H390.5a6 6 0 010-12h74.2002a6 6 0 010 12z"
+                    fill="#e6e6e6" />
+                <path d="M444.00537 579.99218H395.5a11 11 0 010-22h48.50537a11 11 0 010 22z" fill="#0d6efd" />
+                <path
+                    d="M592.5 603.99218h-202a6 6 0 010-12h202a6 6 0 010 12zM464.7002 627.99218H390.5a6 6 0 010-12h74.2002a6 6 0 010 12z"
+                    fill="#e6e6e6" />
+                <path class="vert-move2"
+                    d="M621 394.49218H235a8.50981 8.50981 0 01-8.5-8.5v-105a8.50951 8.50951 0 018.5-8.5h386a8.50982 8.50982 0 018.5 8.5v105a8.51013 8.51013 0 01-8.5 8.5z"
+                    fill="#0d6efd" />
+                <path
+                    d="M96.23159 519.41223c3.69 25.89-15.85 140.59-13.68 140.57995l28.06-.15c1-1.92 13.88-63.81 17.92-73.74 5.64-13.78 11.33-27.73 13.55-42.45 2.09-13.82 1.06-27.9-.3-41.81a2.64 2.64 0 00-3.06-3l-37.65-1.94c-7.76-.4-9.6-2.1-8.42 5.52.81999 5.69006 2.75999 11.23004 3.58 16.99005z"
+                    fill="#2f2e41" />
+                <path
+                    d="M103.63158 456.46225c-7.65 11-15.67 23.66-13.13 36.83 1.93 10 9.55 17.75 16.74 25 28.74 28.86 85.41 156.2 85.41 156.2 27.3484-17.50006-.6516.49994 27.1-18-2.46-.19-58.35-201.1-62.98-201.37-18.72999-1.24002-34.89-3.07001-53.14 1.34z"
+                    fill="#2f2e41" />
+                <path
+                    d="M133.8901 351.76314c-3.88566-3.46527-31.19235-14.1516-31.19235-14.1516a4.68431 4.68431 0 00-1.5087.04526c-1.554.39225-2.26305 2.32338-1.93113 3.88489s-2.39129 27.22447-3.09283 38.89426c-1.22959 20.36744 10.76456 66.50345 10.659 67.91408a21.0765 21.0765 0 01-6.20829 13.29164c.93413 1.15954 60.265 3.48511 64.30074 4.858.81469-1.03345-4.594-74.2129-4.84293-78.34672-.41493-6.27619-21.05395-31.63739-26.18351-36.38981z"
+                    fill="#e6e6e6" />
+                <path
+                    d="M91.57277 510.55066a10.74272 10.74272 0 003.84156-16.01843l25.033-138.54005-23.36007-.30784-17.384 136.99816a10.80091 10.80091 0 0011.86954 17.86816z"
+                    fill="#ffb8b8" />
+                <path
+                    d="M91.37159 366.27221a4.43008 4.43008 0 01-2.76-.72c-1.39-1.19 9.95-19.4 12.19-19.67 7.29-.84 14.79-1.12 21.86.85s13.72 6.45 16.88 13.08c1.32 2.76-8.25 16.65-12.6 14.61-5.21-2.43997-28.71-7.97998-35.57-8.15z"
+                    fill="#e6e6e6" />
+                <circle cx="117.102" cy="309.88012" r="26.2388" fill="#ffb8b8" />
+                <path
+                    d="M91.32988 353.26358a21.92466 21.92466 0 0023.08561-28.72549c-1.04421-3.13933-2.78963-6.01687-3.74586-9.1841s-.98231-6.91217 1.13861-9.45136c4.14967-4.968 12.14792-1.84307 18.54524-2.83076 6.81664-1.05242 12.04628-7.59224 12.59177-14.46805s-3.03837-13.68-8.37342-18.05169-12.21571-6.5243-19.08006-7.19875a51.59436 51.59436 0 00-52.95464 70.4952c2.86787 7.17557 7.55225 13.85879 14.20586 17.78854s15.44129 4.68471 22.07272.71765"
+                    fill="#2f2e41" />
+                <path class="vert-move2"
+                    d="M372.277 320.49218h-67.0539c-4.25851 0-7.723-4.93457-7.723-11s3.46454-11 7.72305-11H372.277c4.25851 0 7.723 4.93457 7.723 11s-3.46454 11-7.723 11z"
+                    fill="#fff" />
+                <path class="vert-move2"
+                    d="M552.5 344.49218h-249a6 6 0 010-12h249a6 6 0 010 12zM424.7002 368.49218H303.5a6 6 0 010-12h121.2002a6 6 0 010 12z"
+                    fill="#e6e6e6" />
+                <path fill="#3f3d56" d="M0 699.99219h790v2H0z" />
+            </svg>
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-4" data-aos="fade-up" data-aos-delay="200">Stay organized</h1>
+            <p class="lead" data-aos="fade-up" data-aos-delay="300">Add or remove bookmark entries with the click of a
+                button, and use the search tool to easily find what you're looking for by bookmark title, source, page
+                number, or even description.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container col-xxl-8 px-4 pb-5">
+    <div class="row flex-md-row-reverse align-items-center g-5 pb-5">
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-4" data-aos="fade-up" data-aos-delay="200">Stay connected</h1>
+            <p class="lead" data-aos="fade-up" data-aos-delay="300">Make sure you can always find what you're looking for -
+                access your bookmark list from anywhere with your Librowser account, and pick up right where you left off.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            </div>
+        </div>
+        <div class="col-10 col-sm-8 col-lg-6" data-aos="fade-in" data-aos-delay="400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="d-block mx-lg-auto img-fluid"
+                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 690 580">
+                <defs>
+                    <path class="vert-move3"
+                        d="M266.53 490.04c-2.76-.01-4.99-2.24-5-5V68.07c.01-2.76 2.24-4.99 5-5H645.5c2.76.01 5 2.24 5 5v416.97c0 2.76-2.24 4.99-5 5H266.53zm0-424.97c-1.65 0-2.99 1.35-3 3v416.97c.01 1.65 1.35 2.99 3 3H645.5c1.66-.01 3-1.35 3-3V68.07c0-1.65-1.34-3-3-3H266.53z"
+                        id="a" />
+                    <path class="vert-move3"
+                        d="M336.03 222.06c-2.76 0-5-2.24-5-5v-93.99c0-2.76 2.24-5 5-5h93.99c2.76 0 5 2.24 5 5v93.99c0 2.76-2.24 5-5 5h-93.99zm0-101.99c-1.66 0-3 1.34-3 3v93.99c0 1.66 1.34 3 3 3h93.99c1.66 0 3-1.34 3-3v-93.99c0-1.66-1.34-3-3-3h-93.99z"
+                        id="b" />
+                    <path class="vert-move3"
+                        d="M309.03 233.56c-2.48-.01-4.5-2.02-4.5-4.5v-93.99c0-2.49 2.02-4.5 4.5-4.5h93.99c2.49 0 4.5 2.01 4.5 4.5v93.99c0 2.48-2.01 4.49-4.5 4.5h-93.99z"
+                        id="c" />
+                    <path class="vert-move3"
+                        d="M309.03 279.55c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5H603c2.49 0 4.5 2.02 4.5 4.5 0 2.49-2.01 4.5-4.5 4.5H309.03z"
+                        id="d" />
+                    <path class="vert-move3"
+                        d="M309.03 310.55c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5h222.98c2.49 0 4.5 2.02 4.5 4.5 0 2.49-2.01 4.5-4.5 4.5H309.03z"
+                        id="e" />
+                    <path class="vert-move3"
+                        d="M472.02 165.56c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5H602c2.49 0 4.5 2.02 4.5 4.5 0 2.49-2.01 4.5-4.5 4.5H472.02z"
+                        id="f" />
+                    <path class="vert-move3"
+                        d="M472.02 196.56c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5h97.54c2.49 0 4.5 2.02 4.5 4.5 0 2.49-2.01 4.5-4.5 4.5h-97.54z"
+                        id="g" />
+                    <path class="vert-move3"
+                        d="M309.03 341.55c-2.49 0-4.5-2.02-4.5-4.5 0-2.49 2.01-4.5 4.5-4.5H603c2.49 0 4.5 2.01 4.5 4.5 0 2.48-2.01 4.5-4.5 4.5H309.03z"
+                        id="h" />
+                    <path class="vert-move3"
+                        d="M309.03 372.55c-2.49 0-4.5-2.02-4.5-4.5 0-2.49 2.01-4.5 4.5-4.5h222.98c2.49 0 4.5 2.01 4.5 4.5 0 2.48-2.01 4.5-4.5 4.5H309.03z"
+                        id="i" />
+                    <path class="vert-move3"
+                        d="M309.03 403.54c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5H603c2.49 0 4.5 2.02 4.5 4.5 0 2.49-2.01 4.5-4.5 4.5H309.03z"
+                        id="j" />
+                    <path class="vert-move3"
+                        d="M309.03 434.54c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5H603c2.49 0 4.5 2.02 4.5 4.5 0 2.49-2.01 4.5-4.5 4.5H309.03z"
+                        id="k" />
+                    <path class="vert-move"
+                        d="M150.97 451.35c-2.76 0-4.99-2.24-5-5V313.36c.01-2.76 2.24-4.99 5-5h214.98c2.76.01 5 2.24 5 5v132.99c0 2.76-2.24 5-5 5H150.97z"
+                        id="l" />
+                    <path class="vert-move"
+                        d="M150.97 451.35c-2.76 0-4.99-2.24-5-5V313.36c.01-2.76 2.24-4.99 5-5h214.98c2.76.01 5 2.24 5 5v132.99c0 2.76-2.24 5-5 5H150.97zm0-140.99c-1.65 0-3 1.35-3 3v132.99c0 1.66 1.35 3 3 3h214.98c1.66 0 3-1.34 3-3V313.36c0-1.65-1.34-3-3-3H150.97z"
+                        id="m" />
+                    <path class="vert-move"
+                        d="M193.47 368.86c-2.49 0-4.5-2.02-4.5-4.5 0-2.49 2.01-4.5 4.5-4.5h129.99c2.48 0 4.5 2.01 4.5 4.5 0 2.48-2.02 4.5-4.5 4.5H193.47z"
+                        id="n" />
+                    <path class="vert-move"
+                        d="M193.47 399.85c-2.49 0-4.5-2.01-4.5-4.5 0-2.48 2.01-4.5 4.5-4.5h129.99c2.48 0 4.5 2.02 4.5 4.5 0 2.49-2.02 4.5-4.5 4.5H193.47z"
+                        id="o" />
+                    <path d="M127.07 567.92l5.84-47.28h-18.1v47.28h12.26z" id="p" />
+                    <path d="M111.69 563.92h24.14c8.5 0 15.39 6.88 15.39 15.38v.5h-39.53v-15.88z" id="q" />
+                    <path d="M31.49 564.44l12.83-45.88-15.89-2.7-9.07 46.75 12.13 1.83z" id="r" />
+                    <path
+                        d="M16.87 558.19l23.87 3.61c8.4 1.27 14.18 9.11 12.91 17.51 0 .03-.03.2-.07.49l-39.08-5.9 2.37-15.71z"
+                        id="s" />
+                    <path
+                        d="M57.16 333.59l13.61 3.57-.9 22.07c-.07 24.1-.11 37.5-.12 40.17 3.66 2.53 4.58 7.55 2.05 11.21-2.53 3.65-7.55 4.57-11.21 2.04-3.65-2.53-4.57-7.55-2.04-11.2.17-.25.35-.48.55-.71-.28-2.69-1.67-16.13-4.18-40.32l2.24-26.83z"
+                        id="t" />
+                    <path
+                        d="M54.79 308.32c.16-4.36 2.84-8.22 6.87-9.89 3.77-1.68 8.19-.97 11.24 1.81 2.18 1.95 3.39 4.75 3.31 7.66.03 12.93-2.89 31.77-2.92 31.96 0 .02-.01.12-.04.3l-19.9 6.7c.77-20.56 1.25-33.4 1.44-38.54z"
+                        id="u" />
+                    <path
+                        d="M90.36 345.01l30.43-7.87 14.07 47.37.5 176.48-23.27-.14-9.73-142.84-61.99 131.98-25-3c32.7-84.89 50.86-132.05 54.5-141.48 0 0-3-25 6.5-37.5-.14-.87-.8-5.2-2-13l15.99-10z"
+                        id="v" />
+                    <path
+                        d="M68.85 353.05c-1.39-4.17-12.49-37.48-13.88-41.64-1.32-3.98-.18-8.36 2.92-11.18.41-.37 2.41-2.2 6.03-5.48L68 278.42l23.47 5.73-1.93 7.74 10.62-1.93 22.37 49.82-46.76 18.7c-1.38.02-2.15.03-2.3.03-1.41 0-2.74-.62-3.62-1.71-.86-1.05-1.23-2.42-1-3.75z"
+                        id="w" />
+                    <path
+                        d="M102.42 321.64l13.41-4.26 11.03 19.13c12.83 20.41 19.96 31.75 21.38 34.02 4.45.18 7.9 3.93 7.72 8.38-.19 4.44-3.94 7.89-8.38 7.71-4.44-.18-7.9-3.93-7.71-8.38.01-.29.04-.59.08-.88-1.67-2.13-10.03-12.74-25.09-31.85l-12.44-23.87z"
+                        id="x" />
+                    <path
+                        d="M86.91 301.54c-2.2-3.76-2-8.46.52-12.02 2.29-3.44 6.4-5.2 10.47-4.48 2.88.48 5.4 2.2 6.89 4.71 6.94 10.91 14.54 28.39 14.62 28.57.01.01.05.11.12.27l-13.23 16.3c-10.34-17.78-16.81-28.9-19.39-33.35z"
+                        id="y" />
+                    <path
+                        d="M85.37 238.08c-10.3 0-18.65 8.35-18.65 18.65 0 10.3 8.35 18.65 18.65 18.65 10.3 0 18.64-8.35 18.64-18.65 0-10.3-8.34-18.65-18.64-18.65z"
+                        id="z" />
+                    <path
+                        d="M52.41 212.94c-9.92 0-17.96 8.04-17.96 17.96 0 9.92 8.04 17.96 17.96 17.96 9.92 0 17.97-8.04 17.97-17.96 0-9.92-8.05-17.96-17.97-17.96z"
+                        id="A" />
+                    <path
+                        d="M62 241.74c1.18-1.64 2.08-3.46 2.66-5.4-1.24 9.85-10.22 16.82-20.07 15.58-9.84-1.23-16.82-10.22-15.58-20.06.13-.98.33-1.94.61-2.88-.82 6.51 1.98 12.95 7.3 16.79 8.04 5.82 19.27 4.01 25.08-4.03z"
+                        id="B" />
+                    <path
+                        d="M99.43 234.42c-3.58-3.02-7.98-3.9-11.52-1.04-10.77-4.66-23.28.3-27.93 11.07-4.65 10.77.31 23.28 11.08 27.93 10.77 4.65 23.27-.31 27.92-11.08 1.15-2.66 1.74-5.53 1.74-8.42 0-.81-.05-1.61-.14-2.41 3.08-.43 4.14-4.24 7.23-4.68-3.14-5.61-4.34-7.95-8.38-11.37z"
+                        id="C" />
+                    <path
+                        d="M2.19 580c-.38 0-.69-.44-.69-.99 0-.54.31-.98.69-.98h264.58c.39 0 .7.44.7.98 0 .55-.31.99-.7.99H2.19z"
+                        id="D" />
+                </defs>
+                <use xlink:href="#a" fill="#3f3d56" />
+                <use xlink:href="#a" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#b" fill="#f2f2f2" />
+                <use xlink:href="#b" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#c" fill="#0d6efd" />
+                <use xlink:href="#c" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#d" fill="#ccc" />
+                <use xlink:href="#d" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#e" fill="#ccc" />
+                <use xlink:href="#e" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#f" fill="#ccc" />
+                <use xlink:href="#f" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#g" fill="#ccc" />
+                <use xlink:href="#g" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#h" fill="#ccc" />
+                <use xlink:href="#h" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#i" fill="#ccc" />
+                <use xlink:href="#i" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#j" fill="#ccc" />
+                <use xlink:href="#j" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#k" fill="#ccc" />
+                <use xlink:href="#k" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#l" fill="#fff" />
+                <use xlink:href="#l" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#m" fill="#3f3d56" />
+                <use xlink:href="#m" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#n" fill="#ccc" />
+                <use xlink:href="#n" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <use xlink:href="#o" fill="#ccc" />
+                <use xlink:href="#o" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                <g>
+                    <use xlink:href="#p" fill="#a0616a" />
+                    <use xlink:href="#p" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#q" fill="#2f2e41" />
+                    <use xlink:href="#q" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#r" fill="#a0616a" />
+                    <use xlink:href="#r" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#s" fill="#2f2e41" />
+                    <use xlink:href="#s" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#t" fill="#a0616a" />
+                    <use xlink:href="#t" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#u" fill="#0d6efd" />
+                    <use xlink:href="#u" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#v" fill="#2f2e41" />
+                    <use xlink:href="#v" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#w" fill="#0d6efd" />
+                    <use xlink:href="#w" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#x" fill="#a0616a" />
+                    <use xlink:href="#x" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#y" fill="#0d6efd" />
+                    <use xlink:href="#y" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#z" fill="#a0616a" />
+                    <use xlink:href="#z" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#A" fill="#2f2e41" />
+                    <use xlink:href="#A" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#B" fill="#2f2e41" />
+                    <use xlink:href="#B" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#C" fill="#2f2e41" />
+                    <use xlink:href="#C" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+                <g>
+                    <use xlink:href="#D" fill="#ccc" />
+                    <use xlink:href="#D" fill-opacity="0" stroke="#000" stroke-opacity="0" />
+                </g>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="container border-top px-4 py-5" id="featured-3">
+    <h2 class="pb-2 h1 text-center" data-aos="fade-up" data-aos-delay="50">Features</h2>
+    <div class="row g-5 py-4">
+        <div class="feature col-md-4">
+            <h2 class="h3" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-list-ul text-info pe-1 mb-3"></i>Bookmarking</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Easily create and delete new bookmarks with different attributes on a clean, user-friendly interface.</p>
+        </div>
+        <div class="feature col-md-4">
+            <h2 class="h3" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-cloud text-primary pe-1 mb-3"></i>Autosave</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Your bookmark list automatically saves to the cloud whenever you make an edit, enabling you to access them anytime later.</p>
+        </div>
+        <div class="feature col-md-4">
+            <h2 class="h3" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-search text-info pe-1 mb-3"></i>Searching</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Find what you need quickly with the search function, which will filter your bookmarks based on regex matches.</p>
+        </div>
+    </div>
+    <p class="my-3 h5 lead text-center" data-aos="fade-in" data-aos-delay="350" data-aos-duration="1500">Ready to try? <a href="/signup">Register</a> an account today, or <a href="/signin">log in</a> with an existing one.</p>
+</div>
+
+<footer class="footer mt-auto px-4 py-3 bg-light">
+    <div class="container mt-3 mb-4">
+        <p class="text-muted">Made with <span data-bs-toggle="tooltip" data-bs-placement="top" title="tea :)">&#127861;</span> by Emma Huang and Michael Li.
+        <a href="https://github.com/ML72/Librowser" target="_blank">View on Github</a></p>
+    </div>
+</footer>
+  
 
 <%- include("../partials/footer") -%>

@@ -41,9 +41,39 @@
         <%# Animate On Scroll import %>
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <%# Fontawesome import %>
+        <script src="https://kit.fontawesome.com/89e5948346.js" crossorigin="anonymous"></script>
         
         <%# Custom CSS %>
-        <link rel="stylesheet" href="/client/css/app.css">
+        <style>
+            .icon-root {
+                fill: currentColor;
+                width: 1em;
+                height: 1em;
+                display: inline-block;
+                font-size: 1.5rem;
+                transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                flex-shrink: 0;
+                user-select: none;
+            }
+            ::selection {
+                color: #fff;
+                background: #0ECAF0;
+            }
+            #loading {
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                position: fixed;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+                z-index: 10000;
+            }
+        </style>
 
     </head>
 
