@@ -113,6 +113,23 @@ app.get("/home", (req, res) => {
     }
 });
 
+app.post("/updateBookmarks", async (req, res) => {
+    if(req.isAuthenticated()) {
+
+        let bookmarks = JSON.parse(req.body.bookmarks);
+        let email = req.user.email;
+        
+        await User.updateOne({ email },{
+            $set: { bookmarks },
+            $currentDate: { lastModified: true }
+        });
+
+        res.json({ success: true, msg: "Successfully saved bookmarks!" });
+    } else {
+        res.json({ success: false, msg: "Not authenticated" });
+    }
+});
+
 // LISTEN TO PUBLIC ROUTES
 app.get("/", (req, res) => {
     if(!req.isAuthenticated()) {

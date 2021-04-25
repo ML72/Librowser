@@ -13,6 +13,7 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    bookmarks: Array,
     creationDate: {
         type: Date,
         default: Date.now
