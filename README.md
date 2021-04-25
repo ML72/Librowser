@@ -1,6 +1,8 @@
 # Librowser
+Created with 🍵 by Emma Huang and Michael Li @ Los Altos Hacks 2021
 
-Created for Los Altos Hacks on 4/24/2021
-By Emma Huang and Michael Li
+> Keep your paper study resources organized with Librowser, a free bookmarking tool to store and track information about important content from your physical books and articles.
 
-A video demonstration can be found here: [enter URL later]
+- Watch the video demo [here](https://youtu.be/61QWYEd24lM)
+- Visit our Devpost project page [here](https://devpost.com/software/librowser)
+- Try Librowser out for yourself [here](https://librowser.herokuapp.com/)
