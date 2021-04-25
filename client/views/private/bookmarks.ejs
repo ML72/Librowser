@@ -7,6 +7,9 @@
 <script>
     $(document).ready(function() {
 
+        // aos animations
+        AOS.init({ once: true, duration: "900" });
+
         // load list
         let bookmarkString = "<%= bookmarks %>";
         bookmarkString = bookmarkString.replaceAll("&#34;", "\"");
@@ -142,15 +145,15 @@
 
 <div class="container my-5">
 
-    <div class="alert alert-info alert-dismissible fade show" role="alert" id="equationAlert">We support LaTeX! Surround your equations with $ symbols. <strong>Try it out!</strong></div>
+    <div class="alert alert-info alert-dismissible fade show" role="alert" id="equationAlert" data-aos="fade-in" data-aos-delay="0" >We support LaTeX! Surround your equations with $ symbols. <strong>Try it out!</strong></div>
 
     <div class="pt-2 pb-3">
-        <h1>Your Bookmarks</h1>
-        <div id="autosave" class="form-text">Bookmarks autosave as you edit them</div>
-        <p>Stay on top of where all the neccessary information is in your textbooks!</p>
+        <h1 data-aos="fade-in" data-aos-delay="200">My Bookmarks</h1>
+        <div id="autosave" class="form-text" data-aos="fade-in" data-aos-delay="300">Bookmarks autosave as you edit them</div>
+        <p data-aos="fade-in" data-aos-delay="400">Stay on top of all the neccessary information in those textbooks!</p>
     </div>
 
-    <button class="btn btn-primary mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm">New bookmark</button>
+    <button class="btn btn-primary mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm" data-aos="fade-in" data-aos-delay="500">New bookmark</button>
     <div class="collapse mb-4" id="collapseForm">
         <div class="card card-body">
             <form name="bookmarkList" class="row g-4" id="bookmark">
@@ -178,9 +181,9 @@
         </div>
     </div>
 
-    <input class="form-control my-3" id="search" type="text" placeholder="Search or Filter" />
+    <input class="form-control my-3" id="search" type="text" placeholder="Search or Filter" data-aos="fade-in" data-aos-delay="600" />
 
-    <table class="table table-hover" id="bookmarkTable">
+    <table class="table table-hover" id="bookmarkTable" data-aos="fade-in" data-aos-delay="700">
         <thead>
             <tr>
                 <th scope="col">Title</th>

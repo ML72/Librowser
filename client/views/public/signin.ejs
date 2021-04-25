@@ -6,6 +6,9 @@
 <script>
     $(document).ready(() => {
 
+        // aos animations
+        AOS.init({ once: true, duration: "900" });
+
         $("#flash").hide(0);
 
         $("#submit").click(() => {
@@ -25,7 +28,7 @@
     });
 </script>
 
-<div class="container">
+<div class="container" data-aos="fade-in" data-aos-delay="100">
     <div class="row">
         <div class="col-lg-12 text-center mb-3">
             <h1 class="mt-5">Sign In to Librowser</h1>
@@ -36,15 +39,15 @@
   
 <div class="container">
     <form action="/signin" method="post">
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3" data-aos="fade-in" data-aos-delay="200">
             <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
             <label for="email">Email address</label>
         </div>
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3" data-aos="fade-in" data-aos-delay="300">
             <input type="password" class="form-control" name="password" id="password" placeholder="Password">
             <label for="password">Password</label>
         </div>
-        <button type="button" class="btn btn-primary mb-3" id="submit">Log In</button>
+        <button type="button" class="btn btn-primary mb-3" id="submit" data-aos="fade-in" data-aos-delay="400">Log In</button>
     </form>
 
     <div class="alert alert-danger" role="alert" id="flash"></div>
